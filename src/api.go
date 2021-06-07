@@ -73,7 +73,7 @@ func HandleFuturesStrategy(c *gin.Context) {
 	symbol := alert.Ticker
 	fmt.Printf("trading side: %v, quantity: %v", side, quantity)
 	futuresClient := binance.NewFuturesClient(apiKey, apiSecret)
-	order, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).TimeInForce(futures.TimeInForceTypeGTC).Do(context.Background())
+	order, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).Do(context.Background())
 	if err != nil {
 		c.String(http.StatusBadRequest, "create futures order fail %v", err)
 		return
@@ -101,7 +101,7 @@ func HandleStrategy(c *gin.Context) {
 	symbol := alert.Ticker
 	fmt.Printf("trading side: %v, quantity: %v", side, quantity)
 	client := binance.NewClient(apiKey, apiSecret)
-	order, err := client.NewCreateOrderService().Symbol(symbol).Side(binance.SideType(side)).Type(binance.OrderTypeMarket).Quantity(quantity).TimeInForce(binance.TimeInForceTypeGTC).Do(context.Background())
+	order, err := client.NewCreateOrderService().Symbol(symbol).Side(binance.SideType(side)).Type(binance.OrderTypeMarket).Quantity(quantity).Do(context.Background())
 	if err != nil {
 		c.String(http.StatusBadRequest, "create order fail %v", err)
 		return
