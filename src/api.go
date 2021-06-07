@@ -7,9 +7,17 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"os"
 
 	"github.com/adshao/go-binance/v2"
+	"github.com/adshao/go-binance/v2/futures"
 	"github.com/gin-gonic/gin"
+)
+
+
+var(
+	apiKey string = os.Getenv("BINANCE_API_KEY")
+	apiSecret string = os.Getenv("BINANCE_API_SECRET")
 )
 
 func Ping(c *gin.Context) {
@@ -61,14 +69,16 @@ func HandleFuturesStrategy(c *gin.Context) {
 		return
 	}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
-	quantity := alert.Strategy.OrderContracts
+	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
 	fmt.Printf("trading side: %v, quantity: %v", side, quantity)
-	err = createFuturesOrder(symbol, side, fmt.Sprintf("%f", quantity))
+	futuresClient := binance.NewFuturesClient(apiKey, apiSecret)
+	order, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).TimeInForce(futures.TimeInForceTypeGTC).Do(context.Background())
 	if err != nil {
 		c.String(http.StatusBadRequest, "create futures order fail %v", err)
 		return
 	}
+	fmt.Println(order)
 	c.String(http.StatusOK, "create futures order success")
 }
 
@@ -87,14 +97,16 @@ func HandleStrategy(c *gin.Context) {
 		return
 	}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
-	quantity := alert.Strategy.OrderContracts
+	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
 	fmt.Printf("trading side: %v, quantity: %v", side, quantity)
-	err = createOrder(symbol, side, fmt.Sprintf("%f", quantity))
+	client := binance.NewClient(apiKey, apiSecret)
+	order, err := client.NewCreateOrderService().Symbol(symbol).Side(binance.SideType(side)).Type(binance.OrderTypeMarket).Quantity(quantity).TimeInForce(binance.TimeInForceTypeGTC).Do(context.Background())
 	if err != nil {
 		c.String(http.StatusBadRequest, "create order fail %v", err)
 		return
 	}
+	fmt.Println(order)
 	c.String(http.StatusOK, "create order success")
 }
 
