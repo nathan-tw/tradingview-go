@@ -16,18 +16,18 @@ type TradingviewAlert struct {
 		High   float64   `json:"high"`
 		Low    float64   `json:"low"`
 		Close  float64   `json:"close"`
-		Volume float64       `json:"volume"`
+		Volume float64   `json:"volume"`
 	} `json:"bar"`
 	Strategy struct {
-		PositionSize           float64     `json:"position_size"`
+		PositionSize           float64 `json:"position_size"`
 		OrderAction            string  `json:"order_action"`
-		OrderContracts         float64     `json:"order_contracts"`
+		OrderContracts         float64 `json:"order_contracts"`
 		OrderPrice             float64 `json:"order_price"`
 		OrderID                string  `json:"order_id"`
 		MarketPosition         string  `json:"market_position"`
-		MarketPositionSize     float64     `json:"market_position_size"`
+		MarketPositionSize     float64 `json:"market_position_size"`
 		PrevMarketPosition     string  `json:"prev_market_position"`
-		PrevMarketPositionSize float64     `json:"prev_market_position_size"`
+		PrevMarketPositionSize float64 `json:"prev_market_position_size"`
 	} `json:"strategy"`
 }
 

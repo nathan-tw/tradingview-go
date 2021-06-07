@@ -1,24 +1,41 @@
 package src
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
 	"os"
+	"strings"
 
 	"github.com/adshao/go-binance/v2"
 	"github.com/adshao/go-binance/v2/futures"
 	"github.com/gin-gonic/gin"
 )
 
-
-var(
-	apiKey string = os.Getenv("BINANCE_API_KEY")
+var (
+	apiKey    string = os.Getenv("BINANCE_API_KEY")
 	apiSecret string = os.Getenv("BINANCE_API_SECRET")
 )
+
+type responseBodyWriter struct {
+	gin.ResponseWriter
+	body *bytes.Buffer
+}
+
+func (r responseBodyWriter) Write(b []byte) (int, error) {
+	r.body.Write(b)
+	return r.ResponseWriter.Write(b)
+}
+
+func LogResponseBody(c *gin.Context) {
+	w := &responseBodyWriter{body: &bytes.Buffer{}, ResponseWriter: c.Writer}
+	c.Writer = w
+	c.Next()
+	fmt.Println("Response body: " + w.body.String())
+}
 
 func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{
@@ -53,7 +70,6 @@ func TestReceiveAlert(c *gin.Context) {
 	fmt.Println(alert.Strategy.OrderAction)
 }
 
-
 func HandleFuturesStrategy(c *gin.Context) {
 	jsonData, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
@@ -71,7 +87,7 @@ func HandleFuturesStrategy(c *gin.Context) {
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
-	fmt.Printf("trading side: %v, quantity: %v", side, quantity)
+	fmt.Printf("trading side: %v, quantity: %v\n", side, quantity)
 	futuresClient := binance.NewFuturesClient(apiKey, apiSecret)
 	order, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).Do(context.Background())
 	if err != nil {
@@ -109,4 +125,3 @@ func HandleStrategy(c *gin.Context) {
 	fmt.Println(order)
 	c.String(http.StatusOK, "create order success")
 }
-
