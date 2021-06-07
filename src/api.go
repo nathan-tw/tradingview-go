@@ -40,6 +40,10 @@ func HandleFuturesStrategy(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
+	if ok := validatePassPhrase(alert); !ok {
+		c.String(http.StatusBadRequest, "wrong passphrase")
+		return
+	}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	quantity := alert.Strategy.OrderContracts
 	symbol := alert.Ticker
@@ -61,6 +65,10 @@ func HandleStrategy(c *gin.Context) {
 	err = json.Unmarshal(jsonData, alert)
 	if err != nil {
 		panic(err)
+	}
+	if ok := validatePassPhrase(alert); !ok {
+		c.String(http.StatusBadRequest, "wrong passphrase")
+		return
 	}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	quantity := alert.Strategy.OrderContracts

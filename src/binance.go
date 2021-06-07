@@ -1,9 +1,9 @@
 package src
 
-import(
-	"os"
+import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/adshao/go-binance/v2"
 	"github.com/adshao/go-binance/v2/futures"

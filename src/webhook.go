@@ -1,6 +1,9 @@
 package src
 
-import "time"
+import (
+	"os"
+	"time"
+)
 
 type TradingviewAlert struct {
 	Passphrase string    `json:"passphrase"`
@@ -26,4 +29,9 @@ type TradingviewAlert struct {
 		PrevMarketPosition     string  `json:"prev_market_position"`
 		PrevMarketPositionSize int     `json:"prev_market_position_size"`
 	} `json:"strategy"`
+}
+
+func validatePassPhrase(ta *TradingviewAlert) bool {
+	ps := os.Getenv("PASSPHRASE")
+	return ps == ta.Passphrase
 }
