@@ -21,7 +21,7 @@ type TradingviewAlert struct {
 	Strategy struct {
 		PositionSize           int     `json:"position_size"`
 		OrderAction            string  `json:"order_action"`
-		OrderContracts         string     `json:"order_contracts"`
+		OrderContracts         int     `json:"order_contracts"`
 		OrderPrice             float64 `json:"order_price"`
 		OrderID                string  `json:"order_id"`
 		MarketPosition         string  `json:"market_position"`

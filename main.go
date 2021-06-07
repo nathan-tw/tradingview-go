@@ -10,6 +10,7 @@ func main() {
 	r.GET("/", src.Ping)
 	r.POST("/futures_webhook", src.HandleFuturesStrategy)
 	r.POST("/webhook", src.HandleStrategy)
-	r.POST("/", src.Test)
+	r.POST("/test_receive_alert", src.TestReceiveAlert)
+	r.POST("/test_binance_client", src.TestBinanceClient)
 	r.Run()
 }
