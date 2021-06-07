@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/adshao/go-binance/v2"
@@ -65,7 +64,7 @@ func HandleFuturesStrategy(c *gin.Context) {
 	quantity := alert.Strategy.OrderContracts
 	symbol := alert.Ticker
 	fmt.Printf("trading side: %v, quantity: %v", side, quantity)
-	err = createFuturesOrder(symbol, side, strconv.Itoa(quantity))
+	err = createFuturesOrder(symbol, side, fmt.Sprintf("%f", quantity))
 	if err != nil {
 		c.String(http.StatusBadRequest, "create futures order fail %v", err)
 		return
@@ -91,7 +90,7 @@ func HandleStrategy(c *gin.Context) {
 	quantity := alert.Strategy.OrderContracts
 	symbol := alert.Ticker
 	fmt.Printf("trading side: %v, quantity: %v", side, quantity)
-	err = createOrder(symbol, side, strconv.Itoa(quantity))
+	err = createOrder(symbol, side, fmt.Sprintf("%f", quantity))
 	if err != nil {
 		c.String(http.StatusBadRequest, "create order fail %v", err)
 		return
