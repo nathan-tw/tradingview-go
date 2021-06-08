@@ -22,9 +22,9 @@ func main() {
 			param.ErrorMessage,
 		)
 	}))
-	r.Use(gin.Recovery())
-	r.GET("/", src.Ping)
+    r.Use(gin.Recovery())
 	r.Use(src.LogResponseBody)
+    r.GET("/", src.Ping)
 	r.POST("/futures_webhook", src.HandleFuturesStrategy)
 	r.POST("/webhook", src.HandleStrategy)
 	r.POST("/test_receive_alert", src.TestReceiveAlert)
