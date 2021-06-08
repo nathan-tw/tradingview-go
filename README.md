@@ -20,7 +20,7 @@ export BINANCE_API_SECRET="YOUR_API_SECRET"
 For security concern, a passphrase is needed when a webhook send to the server, so also add a `PASSPHRASE` value.
 
 ```bash
-export PASSPHRASE="iLove163_"
+export PASSPHRASE="YOUR_PASSPHRASE"
 ```
 
 #### Heroku
