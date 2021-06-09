@@ -1,4 +1,4 @@
-package src
+package webhook
 
 import (
 	"os"
@@ -31,7 +31,7 @@ type TradingviewAlert struct {
 	} `json:"strategy"`
 }
 
-func validatePassPhrase(ta *TradingviewAlert) bool {
+func ValidatePassPhrase(ta *TradingviewAlert) bool {
 	ps := os.Getenv("PASSPHRASE")
 	return ps == ta.Passphrase
 }
