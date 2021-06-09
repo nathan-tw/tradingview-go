@@ -10,7 +10,16 @@ Currently support binance order and futures.
 1. A `Pro` member of [Tradingview](https://www.tradingview.com/) (in order to send webhook)
 2. A [Heroku](https://heroku.com) account
 
-## Usage
+## Local Usage
+
+```bash
+git clone https://github.com/nathan-tw/tradingview-go.git
+cd tradingview-go
+docker build -t tradingview-go .
+docker run -p 8080:8080 --env BINANCE_API_KEY=$YOUR_API_KEY --env BINANCE_API_SECRET=$YOUR_API_SECRET -e PASSPHRASE=$PASSPHRASE -it tradingview-go
+```
+
+## Heroku Usage
 
 ### Clone this project
 
@@ -66,6 +75,6 @@ filled the `webhook block` with
 
  Copy and paste the contents of `tradingview_webhook_payload_format.txt` to message block
 
- ### Good Lock
+ ### Good Luck
 
  You're good to go now!
