@@ -6,7 +6,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nathan-tw/tradingview-go/src"
+	"github.com/nathan-tw/tradingview-go/src/middlewares/binance"
+	"github.com/nathan-tw/tradingview-go/src/middlewares/general"
+	"github.com/nathan-tw/tradingview-go/src/middlewares/logger"
 )
 
 func main() {
@@ -22,12 +24,10 @@ func main() {
 			param.ErrorMessage,
 		)
 	}))
-    r.Use(gin.Recovery())
-	r.Use(src.LogResponseBody)
-    r.GET("/", src.Ping)
-	r.POST("/futures_webhook", src.HandleFuturesStrategy)
-	r.POST("/webhook", src.HandleStrategy)
-	r.POST("/test_receive_alert", src.TestReceiveAlert)
-	r.POST("/test_binance_client", src.TestBinanceClient)
+	r.Use(gin.Recovery())
+	r.Use(logger.LogResponseBody)
+	r.GET("/ping", general.Ping)
+	r.POST("/binance_futures_webhook", binance.HandleFuturesStrategy)
+	r.POST("/binance_webhook", binance.HandleStrategy)
 	r.Run()
 }
