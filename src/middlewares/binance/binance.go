@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/adshao/go-binance/v2"
 	"github.com/adshao/go-binance/v2/futures"
@@ -76,3 +77,35 @@ func HandleStrategy(c *gin.Context) {
 	fmt.Println(order)
 	c.String(http.StatusOK, "create order success")
 }
+
+
+
+func HandleFuturesStrategyForRat(c *gin.Context) {
+	time.Sleep(time.Second)
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		panic(err)
+	}
+	alert := new(webhook.TradingviewAlert)
+	err = json.Unmarshal(jsonData, alert)
+	if err != nil {
+		panic(err)
+	}
+	if ok := webhook.ValidatePassPhrase(alert); !ok {
+		c.String(http.StatusBadRequest, "wrong passphrase")
+		return
+	}
+	side := strings.ToUpper(alert.Strategy.OrderAction)
+	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
+	symbol := alert.Ticker
+	fmt.Printf("trading side: %v, quantity: %v\n", side, quantity)
+	futuresClient := binance.NewFuturesClient(apiKey, apiSecret)
+	order, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).Do(context.Background())
+	if err != nil {
+		c.String(http.StatusBadRequest, "create futures order fail %v", err)
+		return
+	}
+	fmt.Println(order)
+	c.String(http.StatusOK, "create futures order success")
+}
+
