@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -82,7 +83,9 @@ func HandleStrategy(c *gin.Context) {
 
 
 func HandleFuturesStrategyForRat(c *gin.Context) {
-	time.Sleep(time.Second)
+	delay := os.Getenv("delay")
+	duration, _ := strconv.Atoi(delay)
+	time.Sleep(time.Duration(duration) * time.Millisecond)
 	jsonData, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		panic(err)
