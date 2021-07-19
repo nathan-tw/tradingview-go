@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func RatForwarder() *map[int][]string{
+func RatForwarder() *map[int][]string {
 	apiMatcher, _ := regexp.Compile("^rat_[0-9]+_api_key")
 	secretMatcher, _ := regexp.Compile("^rat_[0-9]+_api_secret")
 	qtyMatcher, _ := regexp.Compile("^rat_[0-9]+_qty")
