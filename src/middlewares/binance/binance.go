@@ -13,6 +13,7 @@ import (
 	"github.com/adshao/go-binance/v2"
 	"github.com/adshao/go-binance/v2/futures"
 	"github.com/gin-gonic/gin"
+	"github.com/nathan-tw/tradingview-go/src/rat_forwarder"
 	"github.com/nathan-tw/tradingview-go/src/webhook"
 )
 
@@ -98,14 +99,11 @@ func HandleFuturesStrategyForRat(c *gin.Context) {
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
-	fmt.Printf("trading side: %v, quantity: %v\n", side, quantity)
-	futuresClient := binance.NewFuturesClient(apiKey, apiSecret)
-	order, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).Do(context.Background())
-	if err != nil {
-		c.String(http.StatusBadRequest, "create futures order fail %v", err)
-		return
+	ratPairs := rat_forwarder.RatForwarder()
+	for _, token := range *ratPairs {
+		futuresClient := binance.NewFuturesClient(token[0], token[1])
+		futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).Do(context.Background())
 	}
-	fmt.Println(order)
 	c.String(http.StatusOK, "create futures order success")
 }
 
