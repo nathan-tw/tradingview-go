@@ -97,12 +97,11 @@ func HandleFuturesStrategyForRat(c *gin.Context) {
 		return
 	}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
-	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
 	ratPairs := rat_forwarder.RatForwarder()
 	for _, token := range *ratPairs {
 		futuresClient := binance.NewFuturesClient(token[0], token[1])
-		futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(quantity).Do(context.Background())
+		futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(token[2]).Do(context.Background())
 	}
 	c.String(http.StatusOK, "create futures order success")
 }
