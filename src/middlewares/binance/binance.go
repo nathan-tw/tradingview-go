@@ -103,12 +103,11 @@ func HandleFuturesStrategyForRat(c *gin.Context) {
 	symbol := alert.Ticker
 	http.Get("https://tradingview-go.herokuapp.com/ping")
 	ratPairs := rat_forwarder.RatForwarder()
-	for _, token := range *ratPairs {
+	for k, token := range *ratPairs {
 		futuresClient := binance.NewFuturesClient(token[0], token[1])
 		_, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(token[2]).Do(context.Background())
 		if err != nil {
-			c.String(http.StatusBadRequest, "create order fail %v", err)
-			return
+			fmt.Printf("no.%v create futures order error: %v\n", k, err)
 		}
 	}
 	c.String(http.StatusOK, "create futures order success")
