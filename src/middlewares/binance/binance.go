@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -21,6 +22,7 @@ import (
 var (
 	apiKey    string = os.Getenv("BINANCE_API_KEY")
 	apiSecret string = os.Getenv("BINANCE_API_SECRET")
+	proxy  string = os.Getenv("QUOTAGUARDSTATIC_URL")
 )
 
 
@@ -101,7 +103,13 @@ func HandleFuturesStrategyForRat(c *gin.Context) {
 	}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	symbol := alert.Ticker
-	http.Get("https://tradingview-go.herokuapp.com/ping")
+	
+	proxyUrl, err := url.Parse(proxy)
+	if err != nil {
+		fmt.Println("fail to parse url")
+		return
+	}
+	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
 	ratPairs := rat_forwarder.RatForwarder()
 	errorFlag := false
 	for k, token := range *ratPairs {
