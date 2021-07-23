@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
 
@@ -19,7 +18,6 @@ import (
 var (
 	apiKey    string = os.Getenv("BINANCE_API_KEY")
 	apiSecret string = os.Getenv("BINANCE_API_SECRET")
-	proxy  string = os.Getenv("QUOTAGUARDSTATIC_URL")
 )
 
 
@@ -37,12 +35,7 @@ func HandleFuturesStrategy(c *gin.Context) {
 		c.String(http.StatusBadRequest, "wrong passphrase")
 		return
 	}
-	proxyUrl, err := url.Parse(proxy)
-	if err != nil {
-		fmt.Println("fail to parse url")
-		return
-	}
-	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
+	
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
