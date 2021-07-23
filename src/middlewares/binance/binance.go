@@ -37,6 +37,12 @@ func HandleFuturesStrategy(c *gin.Context) {
 		c.String(http.StatusBadRequest, "wrong passphrase")
 		return
 	}
+	proxyUrl, err := url.Parse(proxy)
+	if err != nil {
+		fmt.Println("fail to parse url")
+		return
+	}
+	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
@@ -65,12 +71,7 @@ func HandleStrategy(c *gin.Context) {
 		c.String(http.StatusBadRequest, "wrong passphrase")
 		return
 	}
-	proxyUrl, err := url.Parse(proxy)
-	if err != nil {
-		fmt.Println("fail to parse url")
-		return
-	}
-	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
+
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	quantity := fmt.Sprintf("%f", alert.Strategy.OrderContracts)
 	symbol := alert.Ticker
