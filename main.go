@@ -28,7 +28,6 @@ func main() {
 	r.Use(logger.LogResponseBody)
 	r.GET("/ping", general.Ping)
 	r.POST("/binance_futures_webhook", binance.HandleFuturesStrategy)
-	r.POST("/binance_futures_webhook_rat", binance.HandleFuturesStrategyForRat)
 	r.POST("/binance_webhook", binance.HandleStrategy)
 	r.Run()
 }
