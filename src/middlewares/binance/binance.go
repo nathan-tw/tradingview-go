@@ -109,7 +109,7 @@ func HandleFuturesStrategyForRat(c *gin.Context) {
 		_, err := futuresClient.NewCreateOrderService().Symbol(symbol).Side(futures.SideType(side)).Type(futures.OrderTypeMarket).Quantity(token[2]).Do(context.Background())
 		if err != nil {
 			fmt.Printf("no.%v create futures order error: %v\n", k, err)
-			errorFlog = true
+			errorFlag = true
 		}
 	}
 	if errorFlag {
