@@ -101,6 +101,7 @@ func HandleFuturesStrategyForRat(c *gin.Context) {
 	}
 	side := strings.ToUpper(alert.Strategy.OrderAction)
 	symbol := alert.Ticker
+	http.Get("https://tradingview-go.herokuapp.com/ping")
 	ratPairs := rat_forwarder.RatForwarder()
 	for _, token := range *ratPairs {
 		futuresClient := binance.NewFuturesClient(token[0], token[1])
