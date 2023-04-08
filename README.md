@@ -1,14 +1,11 @@
 # Tradingview-go
 
-<img src="asset/tradingview-go.png" width="600"/>
-
-Tradingview-go is a crypto-trading bot triggered by tradingview webhook, and invoke api on heroku.
+Tradingview-go is a crypto-trading bot triggered by tradingview webhook
 Currently support binance order and futures.
 
 ## Requirement
 
 1. A `Pro` member of [Tradingview](https://www.tradingview.com/) (in order to send webhook)
-2. A [Heroku](https://heroku.com) account
 
 ## Local Usage
 
@@ -19,7 +16,7 @@ docker build -t tradingview-go .
 docker run -p 8080:8080 --env BINANCE_API_KEY=$YOUR_API_KEY --env BINANCE_API_SECRET=$YOUR_API_SECRET -e PASSPHRASE=$PASSPHRASE -it tradingview-go
 ```
 
-## Heroku Usage
+## Usage
 
 ### Clone this project
 
@@ -29,15 +26,9 @@ cd tradingview-go
 rm -rf .git
 ```
 
-### New a heroku project
-
-```bash
-heroku create your_app
-```
-
 ### Add environment variables for binance api and a self-defined passphrase.
 
-Add environment variables in `Setting -> Config Variables`.
+Add environment variables (heroku as example).
 
 <img src="asset/heroku_env.png" width="800"/>
 
@@ -52,7 +43,7 @@ Add environment variables in `Setting -> Config Variables`.
 }
 ```
 
-### Deploy this project to heroku
+### Deploy (heroku as example).
 
 ```bash
 git init
